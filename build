@@ -1,0 +1,3 @@
+#!/bin/bash
+(cd ./Robot; ./gradlew clean build)
+(cd ./Trajectories; ./gradlew clean build)
