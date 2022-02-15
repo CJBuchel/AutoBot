@@ -95,10 +95,10 @@ namespace Splines {
      */
     virtual double getSplineAngleRad(float t, Spline spline) {
       SplinePoint gradientPoint = getSplineGradientPoint(t, spline);
-      if (gradientPoint.flag != -1) {
-        return atan2(gradientPoint.waypoint.y, gradientPoint.waypoint.x);
-      } else {
+      if (gradientPoint.flag != 0) {
         return 0;
+      } else {
+        return atan2(gradientPoint.waypoint.y, gradientPoint.waypoint.x);
       }
     }
 

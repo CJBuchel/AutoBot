@@ -16,8 +16,13 @@ namespace Splines {
       p3 = p2 + 1;
       p0 = p1 - 1;
 
-      if (p3 >= (int)spline.points.size()) {
-        return {{0,0}, 1};
+      if (abs(p3) >= (int)spline.points.size()) {
+        p3 = spline.points.size()-1;
+        p2 = p3 - 1;
+        p1 = p2 - 1;
+        p0 = p1 - 1;
+
+        t = 0.999 + (p1 - 1);
       }
 
       t = t - (int)t;
@@ -32,7 +37,7 @@ namespace Splines {
 
       float tx = 0.5f * (spline.points[p0].x * q1 + spline.points[p1].x * q2 + spline.points[p2].x * q3 + spline.points[p3].x * q4);
       float ty = 0.5f * (spline.points[p0].y * q1 + spline.points[p1].y * q2 + spline.points[p2].y * q3 + spline.points[p3].y * q4);
-
+      
       return{ {tx,ty}, flag };
     }
 
@@ -45,8 +50,13 @@ namespace Splines {
       p3 = p2 + 1;
       p0 = p1 - 1;
 
-      if (p3 >= (int)spline.points.size()) {
-        return {{0,0}, 1};
+      if (abs(p3) >= (int)spline.points.size()) {
+        p3 = spline.points.size()-1;
+        p2 = p3 - 1;
+        p1 = p2 - 1;
+        p0 = p1 - 1;
+
+        t = 0.999 + (p1 - 1);
       }
 
       t = t - (int)t;

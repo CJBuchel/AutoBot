@@ -8,13 +8,6 @@
 
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
-#include <rev/CANSparkMax.h>
-
-rev::CANSparkMax m1{4, rev::CANSparkMaxLowLevel::MotorType::kBrushed};
-rev::CANSparkMax m2{1, rev::CANSparkMaxLowLevel::MotorType::kBrushed};
-rev::CANSparkMax m3{2, rev::CANSparkMaxLowLevel::MotorType::kBrushed};
-rev::CANSparkMax m4{3, rev::CANSparkMaxLowLevel::MotorType::kBrushed};
-
 
 class Robot : public frc::TimedRobot {
  public:

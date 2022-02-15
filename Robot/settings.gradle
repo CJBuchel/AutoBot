@@ -26,5 +26,4 @@ pluginManagement {
     }
 }
 
-include("TrajectoryUtilities")
-project(":TrajectoryUtilities").projectDir = file("Trajectory-Utilities/shared-gradle/multiProject")
+include 'Robot'
