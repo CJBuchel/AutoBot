@@ -14,10 +14,10 @@ struct Trajectories {
 
   bool complete = false;
   bool scheduleGains = false;
-  bool tuneMode = true;
+  bool tuneMode = false;
 
   PID::PIDGains linearGains{"Linear Gains", 0.2, 0, 0};
-  PID::PIDGains angleGains{"Angle Gains", 0.01, 0, 0}; // 0.002, 0.5, 0.0001
+  PID::PIDGains angleGains{"Angle Gains", 0.02, 0, 0}; // 0.002, 0.5, 0.0001
 
   PID::PIDController linearController{linearGains};
   PID::PIDController angleController{angleGains};

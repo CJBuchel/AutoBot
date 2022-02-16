@@ -58,7 +58,8 @@ model {
 
         exportedHeaders {
           srcDir 'src/main/include' // robot
-          srcDir '../../Trajectories'
+          srcDir '../../Trajectory-Utilities/TrajectoryUtilities/src/main/public'
+          srcDir '../../Common'
 
           if (includeSrcInIncludeRoot) {
             srcDir 'src/main/cpp' // robot

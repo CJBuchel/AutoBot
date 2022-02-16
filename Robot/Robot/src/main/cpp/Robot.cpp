@@ -14,7 +14,7 @@
 #include <frc/Joystick.h>
 #include <rev/CANSparkMax.h>
 
-#include "Trajectories.h"
+#include "Control.h"
 
 // Motors
 rev::CANSparkMax m1{4, rev::CANSparkMaxLowLevel::MotorType::kBrushed};

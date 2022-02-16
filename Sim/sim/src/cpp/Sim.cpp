@@ -4,12 +4,12 @@
 #include "robot/Encoder.h"
 #include "robot/Drivetrain.h"
 
-#include "Trajectories.h"
+#include "Control.h"
 
-// #define LAPTOP
+#define LAPTOP
 
 #ifdef LAPTOP
-double rotsPerMeter = 12;
+double rotsPerMeter = 7.5; // laptop
 #else
 double rotsPerMeter = 7.5; // 7.5
 #endif

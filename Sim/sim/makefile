@@ -8,7 +8,7 @@ CPP_LIBS = libs/main/cpp*/**/*.cpp libs/main/cpp*/*.cpp
 CPP_SIM = src/cpp*/*.cpp
 
 CPP = $(CPP_LIBS) $(CPP_SIM)
-HEADERS = -Ilibs/main/include -Isrc/include -I../../Trajectories
+HEADERS = -Ilibs/main/include -Isrc/include -I../../Trajectory-Utilities/TrajectoryUtilities/src/main/public -I../../Common
 CFLAGS = -pthread
 
 #OPENCV
