@@ -3,10 +3,9 @@
 struct Trajectories {
   Trajectory<Splines::CatmullRom> trajectory;
 
-
   double maxLinearSpeed = 0.25; // percentage -> 0.25
-  double maxTurnSpeed = 0.25; // percentage -> 0.15
-  double rate = 0.1; // percentage per second
+  double maxTurnSpeed = 0.15; // percentage -> 0.15
+  double rate = 0.075; // percentage per second
 
   double delta_pos = 0, current_pos = 0, last_pos = 0;
 
@@ -16,8 +15,11 @@ struct Trajectories {
   bool scheduleGains = false;
   bool tuneMode = false;
 
-  PID::PIDGains linearGains{"Linear Gains", 0.2, 0, 0};
-  PID::PIDGains angleGains{"Angle Gains", 0.02, 0, 0}; // 0.002, 0.5, 0.0001
+  PID::PIDGains linearGains{"Linear Gains", 0.2, 0.01, 0};
+  PID::PIDGains linearGainsFine{"Linear Gains Fine", 0,0,0};
+
+  PID::PIDGains angleGains{"Angle Gains", 0.02, 0.5, 0.0001}; // 0.002, 0.5, 0.0001
+  PID::PIDGains angleGainsFine{ "Fine Angle Gains", 0, 0, 0 };
 
   PID::PIDController linearController{linearGains};
   PID::PIDController angleController{angleGains};
@@ -26,40 +28,49 @@ struct Trajectories {
     return value < low ? low : value > high ? high : value;
   }
 
-  double linearAcceleration(double value, double lastSpeed, double rate, double maxSpeed, double dt) {
-    double valueRate = (value-lastSpeed); // delta speed
+  double linearAcceleration(double targetSpeed, double lastSpeed, double rate, double maxSpeed, double dt) {
+    double valueRate = (targetSpeed-lastSpeed); // delta speed
     if ( fabs((lastSpeed+valueRate)) > fabs((lastSpeed+(rate*dt))) ) {
       double desiredSpeed = lastSpeed+(rate*dt);
       return fabs(desiredSpeed) > maxSpeed ? constrain(desiredSpeed, -maxSpeed, maxSpeed) : lastSpeed+(rate*dt);
     } else {
-      return value;
+      return targetSpeed;
     }
   }
 
   void build() {
-    trajectory.push_back({
-      {0,1}, // Start Ctrl Pnt
 
-      {1,1}, {3,3}, // forward
-      {3,4}, {1,1}, // back
+    // Trajectory must start where robot starts (1,4)
+    trajectory.push_back({
+      {0,4}, // Start Ctrl Pnt
+
+      {1,4}, {3,5}, // forward
+      {3,6}, {1,4}, // back
       
-      {1,0} // End Ctrl Pnt
+      {1,3} // End Ctrl Pnt
     });
 
     trajectory.build(0.01);
     angleController.setWrap(180);
     linearController.setSetpoint(trajectory.getRawTrajectory().totalLength);
+
+    // Set izones
+    angleController.setIZone(10);
+    linearController.setIZone(10);
   }
 
   void setScheduleGains(double distance, double gyro, double &dt) {
     if (scheduleGains) {
       if (distance > trajectory.getRawTrajectory().totalLength-0.5) {
-        linearGains.scheduleGains(0.3, 0.00001, 0);
-        dt=0.1;
+        linearController.scheduleGains(linearGainsFine);
+      } else {
+        linearController.scheduleDefaultGains();
       }
 
       if (gyro > trajectory.getAngle(distance)-5 && gyro < trajectory.getAngle(distance)+5) {
-        angleGains.scheduleGains(0.02, 0.5, 0.0001);
+        angleController.scheduleGains(angleGainsFine);
+      } else {
+        angleController.scheduleDefaultGains();
       }
     }
   }
@@ -103,7 +114,7 @@ struct Trajectories {
       leftPower += angleOutput;
       rightPower -= angleOutput;
 
-      std::cout << "Goal Distance: " << trajectory.getRawTrajectory().totalLength << ", Distance: " << distance << ", Goal Gyro: " << trajectory.getAngle(distance) << ", Gyro: " << gyro << ", Coords: (" << trajectory.getCoords(distance).x << ", " << trajectory.getCoords(distance).y << ")\n";
+      // std::cout << "Goal Distance: " << trajectory.getRawTrajectory().totalLength << ", Distance: " << distance << ", Goal Gyro: " << trajectory.getAngle(distance) << ", Gyro: " << gyro << ", Coords: (" << trajectory.getCoords(distance).x << ", " << trajectory.getCoords(distance).y << ")\n";
       // std::cout << "Speed: " << speed << ", Delta Position: " << delta_pos << std::endl;
 
 

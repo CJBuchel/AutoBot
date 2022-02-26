@@ -9,6 +9,8 @@ class Sim {
 	void Init();
 	void Periodic();
 
+  void drawTrajectory();
+
 	Window &getWindow() { return _window; }
 
  private:
